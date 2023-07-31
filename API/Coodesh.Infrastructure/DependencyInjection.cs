@@ -1,6 +1,5 @@
 ﻿using Coodesh.Infrastructure.Persistence.Product;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Coodesh.Infrastructure

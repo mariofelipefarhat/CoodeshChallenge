@@ -12,6 +12,7 @@ public class Transaction : BaseEntity
         Product = product;
         Amount = amount;
         Seller = seller;
+        Kind = type == TransactionType.CommissionPaid ? Kind.MoneyOut : Kind.MoneyIn;
     }
 
     [Required]
@@ -28,6 +29,8 @@ public class Transaction : BaseEntity
 
     [Required]
     public string Seller { get; private set; }
+    [Required]
+    public Kind Kind { get; private set; }
 
     public void Update(TransactionType type, DateTime date, string product, decimal amount, string seller)
     {
@@ -36,6 +39,7 @@ public class Transaction : BaseEntity
         Product = product;
         Amount = amount;
         Seller = seller;
+        Kind = type == TransactionType.CommissionPaid ? Kind.MoneyOut : Kind.MoneyIn;
     }
 }
 
@@ -45,4 +49,10 @@ public enum TransactionType
     SaleAffiliate = 2,
     CommissionPaid = 3,
     CommissionReceived = 4
+}
+
+public enum Kind
+{
+    MoneyIn = 1, 
+    MoneyOut = 2,
 }

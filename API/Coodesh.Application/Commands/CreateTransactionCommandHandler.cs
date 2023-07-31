@@ -8,8 +8,7 @@ using System.Text.RegularExpressions;
 using TransactionModel = Coodesh.Infrastructure.Models.Transaction;
 using TransactionTypeModel = Coodesh.Infrastructure.Models.TransactionType;
 
-
-namespace ApiSketch.Application.Commands;
+namespace Coodesh.Application.Commands;
 
 public class CreateTransactionCommandHandler : IRequestHandler<CreateTransactionCommand, ErrorOr<bool>>
 {
@@ -27,7 +26,6 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
 
         if (validationResult.IsValid)
         {
-            //string LinePattern = @"^([1-4])(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}-\d{2}:\d{2})(.+?)(\d{10})(.+)$";
             string LinePattern = @"^([1-4])(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}-\d{2}:\d{2})(.*?\S)\s+(\d{10})(.*)$";
 
             Regex regex = new (LinePattern);
@@ -42,8 +40,6 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
                 if (string.IsNullOrEmpty(line))
                     continue;
 
-
-                //var match = regex.Match(line.Trim().Replace(" ", ""));
                 var match = regex.Match(line);
 
                 if (!match.Success)

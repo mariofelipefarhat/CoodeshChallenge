@@ -1,4 +1,7 @@
-using ApiSketch.Application.Commands;
+using Coodesh.API.Contracts.Requests;
+using Coodesh.Application.Commands;
+using Coodesh.Application.Common.Responses;
+using Coodesh.Application.Queries;
 using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -32,5 +35,19 @@ public class TransactionController : ControllerBase
             return BadRequest(new { result.Errors });
 
         return Ok();
+    }
+
+    [HttpGet("list")]
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(List<TransactionQueryResponse>), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<List<TransactionQueryResponse>> List([FromQuery] TransactionsRequest request)
+    {
+        GetAllTransactionsQuery query = new(request.Page, request.PageSize, request.SortBy, request.SortDirection);
+        List<TransactionQueryResponse> results = await _sender.Send(query);
+        return results;
     }
 }

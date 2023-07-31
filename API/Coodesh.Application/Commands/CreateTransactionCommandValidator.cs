@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace ApiSketch.Application.Commands;
+namespace Coodesh.Application.Commands;
 
 public class CreateTransactionCommandValidator : AbstractValidator<CreateTransactionCommand>
 {
