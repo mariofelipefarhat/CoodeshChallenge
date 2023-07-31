@@ -1,3 +1,4 @@
+using Coodesh.Application;
 using Coodesh.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructurePersistence();
+builder.Services.AddApplication();
 
 var app = builder.Build();
 

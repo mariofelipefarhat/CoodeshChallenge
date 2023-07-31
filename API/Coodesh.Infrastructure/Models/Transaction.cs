@@ -5,7 +5,7 @@ namespace Coodesh.Infrastructure.Models;
 
 public class Transaction : BaseEntity
 {
-    public Transaction(Guid id, TransactionType type, DateTime date, string product, int amount, string seller) : base(id)
+    public Transaction(Guid id, TransactionType type, DateTime date, string product, decimal amount, string seller) : base(id)
     {
         Type = type;
         Date = date;
@@ -15,19 +15,28 @@ public class Transaction : BaseEntity
     }
 
     [Required]
-    public TransactionType Type { get; set; }
+    public TransactionType Type { get; private set; }
 
     [Required]
-    public DateTime Date { get; set; }
+    public DateTime Date { get; private set; }
 
     [Required]
-    public required string Product { get; set; }
+    public string Product { get; private set; }
 
     [Required]
-    public int Amount { get; set; }
+    public decimal Amount { get; private set; }
 
     [Required]
-    public string Seller { get; set; }
+    public string Seller { get; private set; }
+
+    public void Update(TransactionType type, DateTime date, string product, decimal amount, string seller)
+    {
+        Type = type;
+        Date = date;
+        Product = product;
+        Amount = amount;
+        Seller = seller;
+    }
 }
 
 public enum TransactionType

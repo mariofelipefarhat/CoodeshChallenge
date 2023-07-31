@@ -1,24 +1,36 @@
-using Coodesh.Infrastructure;
-using Coodesh.Infrastructure.Models;
+using ApiSketch.Application.Commands;
+using ErrorOr;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Coodesh.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("transactions")]
 public class TransactionController : ControllerBase
 {
-    private readonly TransactionContext _productContext;
-    public TransactionController(TransactionContext ctx)
+    private readonly ISender _sender;
+
+    public TransactionController(ISender sender)
     {
-        _productContext = ctx;
+        _sender = sender;
     }
 
-    [HttpPost]
-    public IActionResult Create(Transaction p)
+    [HttpPost("upload")]
+    [Produces("application/json")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> Create([Required] IFormFile file)
     {
-        _productContext.Add(p);
-        _productContext.SaveChanges();
+        CreateTransactionCommand command = new(file);
+        ErrorOr<bool> result = await _sender.Send(command);
+
+        if (result.IsError)
+            return BadRequest(new { result.Errors });
+
         return Ok();
     }
 }

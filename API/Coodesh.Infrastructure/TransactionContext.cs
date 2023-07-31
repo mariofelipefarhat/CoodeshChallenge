@@ -16,6 +16,10 @@ public class TransactionContext : DbContext
         modelBuilder.Entity<Transaction>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Transaction>()
+            .Property(t => t.Amount)
+            .HasConversion(amount => amount / 100, amount => amount * 100);
     }
 
     public override int SaveChanges()
