@@ -3,45 +3,44 @@ using Coodesh.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Coodesh.Infrastructure
+namespace Coodesh.Infrastructure;
+
+public class TransactionContext : DbContext
 {
-    public class TransactionContext : DbContext
+    public TransactionContext(DbContextOptions<TransactionContext> options) : base(options) { }
+
+    public DbSet<Transaction> Transactions { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public TransactionContext(DbContextOptions<TransactionContext> options) : base(options) { }
+        modelBuilder.Entity<Transaction>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+    }
 
-        public DbSet<Transaction> Transactions { get; set; }
+    public override int SaveChanges()
+    {
+        AddTimestamps();
+        return base.SaveChanges();
+    }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+    private void AddTimestamps()
+    {
+        IEnumerable<EntityEntry> entities = ChangeTracker.Entries()
+            .Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified || x.State == EntityState.Deleted));
+
+        foreach (EntityEntry entity in entities)
         {
-            modelBuilder.Entity<Transaction>()
-                .Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-        }
+            var now = DateTime.UtcNow;
 
-        public override int SaveChanges()
-        {
-            AddTimestamps();
-            return base.SaveChanges();
-        }
-
-        private void AddTimestamps()
-        {
-            IEnumerable<EntityEntry> entities = ChangeTracker.Entries()
-                .Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified || x.State == EntityState.Deleted));
-
-            foreach (EntityEntry entity in entities)
+            if (entity.State == EntityState.Added)
+                ((BaseEntity)entity.Entity).SetCreatedAt(now);
+            if (entity.State == EntityState.Modified)
+                ((BaseEntity)entity.Entity).SetUpdatedAt(now);
+            if (entity.State == EntityState.Deleted)
             {
-                var now = DateTime.UtcNow;
-
-                if (entity.State == EntityState.Added)
-                    ((BaseEntity)entity.Entity).SetCreatedAt(now);
-                if (entity.State == EntityState.Modified)
-                    ((BaseEntity)entity.Entity).SetUpdatedAt(now);
-                if (entity.State == EntityState.Deleted)
-                {
-                    ((BaseEntity)entity.Entity).SetDeletedAt(now);
-                    entity.State = EntityState.Modified;
-                }
+                ((BaseEntity)entity.Entity).SetDeletedAt(now);
+                entity.State = EntityState.Modified;
             }
         }
     }

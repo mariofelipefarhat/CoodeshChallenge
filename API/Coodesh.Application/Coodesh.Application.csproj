@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Coodesh.Domain\Coodesh.Domain.csproj" />
+    <ProjectReference Include="..\Coodesh.Infrastructure\Coodesh.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
