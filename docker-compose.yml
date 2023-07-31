@@ -1,0 +1,32 @@
+version: '3.4'
+
+networks:
+  backend:
+
+services:
+  coodesh.sqlserver:
+    container_name: coodesh-sqlserver
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu    
+    environment:
+        - ACCEPT_EULA=Y
+        - SA_PASSWORD=password@12345#
+        - MSSQL_PID=Express
+    ports:
+        - 1433:1433 
+    networks:
+        - backend
+
+  coodesh.api:
+    container_name: coodesh-api
+    image: ${DOCKER_REGISTRY-}coodeshapi
+    build:
+      context: .
+      dockerfile: API/Coodesh.API/Dockerfile
+    ports:
+        - 8001:80
+    depends_on:
+        - coodesh.sqlserver
+    networks:
+        - backend
+
+  
