@@ -1,22 +1,22 @@
 ﻿using Coodesh.Infrastructure.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Coodesh.Infrastructure.Models;
+namespace Coodesh.Infrastructure.Models.Transaction;
 
-public class Transaction : BaseEntity
+public class TransactionModel : BaseEntity
 {
-    public Transaction(Guid id, TransactionType type, DateTime date, string product, decimal amount, string seller) : base(id)
+    public TransactionModel(Guid id, TransactionTypeModel type, DateTime date, string product, decimal amount, string seller) : base(id)
     {
         Type = type;
         Date = date;
         Product = product;
         Amount = amount;
         Seller = seller;
-        Kind = type == TransactionType.CommissionPaid ? Kind.MoneyOut : Kind.MoneyIn;
+        Kind = type == TransactionTypeModel.CommissionPaid ? Kind.MoneyOut : Kind.MoneyIn;
     }
 
     [Required]
-    public TransactionType Type { get; private set; }
+    public TransactionTypeModel Type { get; private set; }
 
     [Required]
     public DateTime Date { get; private set; }
@@ -32,18 +32,18 @@ public class Transaction : BaseEntity
     [Required]
     public Kind Kind { get; private set; }
 
-    public void Update(TransactionType type, DateTime date, string product, decimal amount, string seller)
+    public void Update(TransactionTypeModel type, DateTime date, string product, decimal amount, string seller)
     {
         Type = type;
         Date = date;
         Product = product;
         Amount = amount;
         Seller = seller;
-        Kind = type == TransactionType.CommissionPaid ? Kind.MoneyOut : Kind.MoneyIn;
+        Kind = type == TransactionTypeModel.CommissionPaid ? Kind.MoneyOut : Kind.MoneyIn;
     }
 }
 
-public enum TransactionType
+public enum TransactionTypeModel
 {
     SaleProducer = 1,
     SaleAffiliate = 2,
@@ -53,6 +53,6 @@ public enum TransactionType
 
 public enum Kind
 {
-    MoneyIn = 1, 
+    MoneyIn = 1,
     MoneyOut = 2,
 }

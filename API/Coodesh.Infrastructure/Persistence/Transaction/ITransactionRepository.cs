@@ -1,9 +1,9 @@
 ﻿using Coodesh.Infrastructure.Common;
-using Coodesh.Infrastructure.Models;
+using Coodesh.Infrastructure.Models.Transaction;
 
-namespace Coodesh.Infrastructure.Persistence.Product;
+namespace Coodesh.Infrastructure.Persistence.Transaction;
 
-public interface ITransactionRepository : IRepository<Transaction>
+public interface ITransactionRepository : IRepository<TransactionModel>
 {
-    void AddRange(List<Transaction> entities);
+    void AddRange(List<TransactionModel> entities);
 }

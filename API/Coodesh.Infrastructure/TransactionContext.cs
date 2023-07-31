@@ -1,5 +1,5 @@
 ﻿using Coodesh.Infrastructure.Entities;
-using Coodesh.Infrastructure.Models;
+using Coodesh.Infrastructure.Models.Transaction;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -9,15 +9,15 @@ public class TransactionContext : DbContext
 {
     public TransactionContext(DbContextOptions<TransactionContext> options) : base(options) { }
 
-    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<TransactionModel> Transactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Transaction>()
+        modelBuilder.Entity<TransactionModel>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
 
-        modelBuilder.Entity<Transaction>()
+        modelBuilder.Entity<TransactionModel>()
             .Property(t => t.Amount)
             .HasConversion(amount => amount / 100, amount => amount * 100);
     }

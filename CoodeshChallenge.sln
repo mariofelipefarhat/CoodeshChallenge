@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coodesh.Domain", "API\Coode
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C16103A3-C8B7-49F4-B08F-677236E4118D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coodesh.Tests", "API\Coodesh.Tests\Coodesh.Tests.csproj", "{70EBFAC2-0972-455F-A267-13B764219006}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C16103A3-C8B7-49F4-B08F-677236E4118D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C16103A3-C8B7-49F4-B08F-677236E4118D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C16103A3-C8B7-49F4-B08F-677236E4118D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70EBFAC2-0972-455F-A267-13B764219006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70EBFAC2-0972-455F-A267-13B764219006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70EBFAC2-0972-455F-A267-13B764219006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70EBFAC2-0972-455F-A267-13B764219006}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

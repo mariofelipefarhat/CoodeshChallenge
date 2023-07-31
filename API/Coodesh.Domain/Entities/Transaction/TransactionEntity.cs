@@ -1,8 +1,8 @@
-﻿namespace Coodesh.Domain.Entities.Product;
+﻿namespace Coodesh.Domain.Entities.Transaction;
 
-public sealed class Transaction
+public sealed class TransactionEntity
 {
-    public Transaction(TransactionType type, DateTime date, string product, decimal amount, string seller)
+    public TransactionEntity(TransactionType type, DateTime date, string product, decimal amount, string seller)
     {
         Type = type;
         Date = date;

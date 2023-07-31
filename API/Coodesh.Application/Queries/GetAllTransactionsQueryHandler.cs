@@ -4,7 +4,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TransactionModel = Coodesh.Infrastructure.Models.Transaction;
+using TransactionModel = Coodesh.Infrastructure.Models.Transaction.TransactionModel;
 
 namespace Coodesh.Application.Queries;
 

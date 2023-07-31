@@ -1,12 +1,14 @@
-﻿using Coodesh.Domain.Entities.Product;
-using Coodesh.Infrastructure.Persistence.Product;
+﻿
+using Coodesh.Domain.Entities.Transaction;
+using Coodesh.Infrastructure.Persistence.Transaction;
 using ErrorOr;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using System.Text.RegularExpressions;
-using TransactionModel = Coodesh.Infrastructure.Models.Transaction;
-using TransactionTypeModel = Coodesh.Infrastructure.Models.TransactionType;
+using TransactionEntity = Coodesh.Domain.Entities.Transaction.TransactionEntity;
+using TransactionModel = Coodesh.Infrastructure.Models.Transaction.TransactionModel;
+using TransactionTypeModel = Coodesh.Infrastructure.Models.Transaction.TransactionTypeModel;
 
 namespace Coodesh.Application.Commands;
 
@@ -30,7 +32,7 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
 
             Regex regex = new (LinePattern);
 
-            var transactionLines = new List<Transaction>();
+            var transactionLines = new List<TransactionEntity>();
 
             using var reader = new StreamReader(cmd.Stream.OpenReadStream());
             while (!reader.EndOfStream)
@@ -46,35 +48,28 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
                 {
                     validationResult.Errors.Add(new ValidationFailure("Invalid Line Data Pattern", line));
                     continue;
-                }                        
+                }
 
-                Transaction transactionLine = ParseTransactionLine(match);
+                TransactionEntity transactionLine = ParseTransactionLine(match);
                 transactionLines.Add(transactionLine);
             }
 
-            if(!validationResult.Errors.Any())
+            if(!validationResult.Errors.Any() && transactionLines.Any())
             {
-                List<TransactionModel> transactions = new List<TransactionModel>();
-
-                foreach (var domain in transactionLines)
-                {
-                    var transaction = new TransactionModel(
-                        Guid.NewGuid(),
-                        (TransactionTypeModel)domain.Type,
-                        domain.Date,
-                        domain.Product,
-                        domain.Amount,
-                        domain.Seller
-                    );
-
-                    transactions.Add(transaction);
-                }
-
+                List<TransactionModel> transactions = transactionLines.Select(domain => 
+                new TransactionModel(
+                    Guid.NewGuid(),
+                    (TransactionTypeModel)domain.Type,
+                    domain.Date,
+                    domain.Product,
+                    domain.Amount,
+                    domain.Seller
+                    )
+                ).ToList();
                 _transactionRepository.AddRange(transactions);
                 _transactionRepository.SaveChanges();
 
                 return true;
-
             }
         }
 
@@ -83,7 +78,7 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
     }
 
     //@@@ manipular a lista de erros caso de erro em algum parse
-    private static Transaction ParseTransactionLine(Match match)
+    private static TransactionEntity ParseTransactionLine(Match match)
     {
         // Parse the matched values from the regular expression groups
         TransactionType type = (TransactionType)int.Parse(match.Groups[1].Value);
@@ -93,7 +88,7 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
         string seller = match.Groups[5].Value.Trim();
 
         // Create the Transaction domain model object
-        Transaction transaction = new(type, date, product, amount, seller);
+        TransactionEntity transaction = new(type, date, product, amount, seller);
 
         return transaction;
     }

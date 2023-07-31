@@ -1,4 +1,4 @@
-﻿using Coodesh.Infrastructure.Persistence.Product;
+﻿using Coodesh.Infrastructure.Persistence.Transaction;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
