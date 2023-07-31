@@ -18,30 +18,15 @@ var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "1433";
 
 var connectionString = $"Server={dbHost},{dbPort};Initial Catalog={dbName};User ID=SA;Password={dbPassword};MultipleActiveResultSets=true;TrustServerCertificate=true";
 
-builder.Services.AddDbContext<ProductContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<TransactionContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
-try
-{
-    using IServiceScope dbServiceScope = app.Services.CreateScope();
-    ProductContext? ctx = dbServiceScope.ServiceProvider.GetService<ProductContext>() ?? null;
-    if (ctx is not null)
-    {
-        ctx.Database.Migrate();
+using IServiceScope dbServiceScope = app.Services.CreateScope();
+TransactionContext? ctx = dbServiceScope.ServiceProvider.GetService<TransactionContext>() ?? null;
+ctx?.Database.Migrate();
 
-        if (!ctx.Products.Any())
-        {
-            //SEEDER?
-        }
-
-    }
-}
-catch (Exception e)
-{
-
-}
-    // Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
