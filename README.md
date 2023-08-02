@@ -5,11 +5,9 @@
 - How to run this challenge on your local machine?:
    - [Requirements 🛠](#Requirements?🛠)
    - [Running 🛠](#Running-🛠)
-   - [Personal considerations about the requirements and domain-problem🛠](#Personal-considerations-about-the-requirements-and-domain-problem-🛠)
 - Personal section:
-   - [How to run the project? 🛠](#How-to-run-the-project?🛠)
    - [Technical project description & technologies🛠](#Technical-project-description-&-technologies-🛠)
-   - [Personal considerations about the requirements and domain-problem🛠](#Personal-considerations-about-the-requirements-and-domain-problem-🛠)
+   - [Considerations about the requirements🛠](#Considerations-about-the-requirements-🛠)
 - Challenge section:
    - [Challenge Description](#Challenge-Description)
    - [Functional Requirements](#Functional-Requirements)
@@ -23,11 +21,12 @@
 Firstly, You'll have to install `Git` and `Docker` on your local machine. After that, clone the project by typing `git clone https://github.com/mariofelipefarhat/CoodeshChallenge.git` on your terminal. 
 
 ### Running
-In the cloned project directory, open the terminal and type `docker-compose up`. After a while, you can access the container API through the link http://localhost:8001/swagger/index.html and check for the API documentation
-
+In the cloned project directory, open the terminal and type `docker-compose up`. After a while, you can access the container API through the link http://localhost:8001/swagger/index.html and check for the API documentation. You can also use the `Swagger UI` to execute a http post method with the transaction example data to the API by attaching the [`sales.txt`](https://github.com/mariofelipefarhat/CoodeshChallenge/blob/main/sales.txt) file. Just click on the green dropdown section (POST/transactions/upload), Try it out, attach the file and click on Execute. The data will be persisted and/or errors can be shown in the response if some data runs out of the normalization pattern.
 
 ## Technical project description & technologies🛠
 This is a solution with two services (.NET 7 API and MYSQL Server) orchestrated by `Docker`. Both services are containers, and each container holds one service/image in its total independent ambient. Each container can communicate with each other through the docker network. For example, the backend API and the MySQL server image are sharing the same network called "backend." All image/service definitions were done in the **[`docker-compose.yml`](https://github.com/mariofelipefarhat/CoodeshChallenge/blob/main/docker-compose.yml)** file. `SOLID` principles, `Domain-Driven Design (DDD)`, `Command-Query Separation (CQS)`, `Clean Arch` (not all) and others were my guide.
+
+## Considerations about the requirements
 
 ## Challenge Description
 A new urgent demand has emerged, and we need an exclusive area to upload a file containing transactions made from selling products by our customers. Our platform operates on the creator-affiliate model, where a creator can sell their products, and one or more affiliates can also sell these products, paying a commission for each sale. Your task is to build a web interface that allows users to upload a file containing transactions of sold products, normalize the data, and store it in a relational database. You should use the file [sales.txt](sales.txt) to test the application. The file format is described in the section "Input File Format."
