@@ -1,7 +1,9 @@
 global using NUnit.Framework;
 using Coodesh.Application.Commands;
+using Coodesh.Application.Interfaces;
 using Coodesh.Infrastructure.Models.Transaction;
 using Coodesh.Infrastructure.Persistence.Transaction;
+using ErrorOr;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
@@ -16,13 +18,15 @@ public class CreateTransactionCommandHandlerTests
     private Mock<ITransactionRepository> _transactionRepositoryMock;
     private Mock<IValidator<CreateTransactionCommand>> _validatorMock;
     private CreateTransactionCommandHandler _commandHandler;
-
+    private Mock<ITransactionFileProcessorService> _transactionFileProcessorServiceMock;
     [SetUp]
     public void Setup()
     {
         _transactionRepositoryMock = new Mock<ITransactionRepository>();
+        _transactionFileProcessorServiceMock = new Mock<ITransactionFileProcessorService>();
         _validatorMock = new Mock<IValidator<CreateTransactionCommand>>();
-        _commandHandler = new CreateTransactionCommandHandler(_transactionRepositoryMock.Object, _validatorMock.Object);
+        _commandHandler = new CreateTransactionCommandHandler(_transactionRepositoryMock.Object,
+            _validatorMock.Object, _transactionFileProcessorServiceMock.Object);
     }
 
     [Test]
@@ -37,8 +41,9 @@ public class CreateTransactionCommandHandlerTests
 
         var command = new CreateTransactionCommand(formFileMock.Object);
 
-        _validatorMock.Setup(validator => validator.ValidateAsync(command, default))
-            .ReturnsAsync(new ValidationResult());
+        _transactionFileProcessorServiceMock.Setup(service => service.ProcessFile(It.IsAny<Stream>())).Returns(new List<TransactionModel>());
+        _transactionRepositoryMock.Setup(rep => rep.AddRange(It.IsAny<List<TransactionModel>>()));
+        _validatorMock.Setup(validator => validator.ValidateAsync(command, default)).ReturnsAsync(new ValidationResult());
 
         var result = _commandHandler.Handle(command, default).Result;
 
@@ -65,7 +70,7 @@ public class CreateTransactionCommandHandlerTests
             new ValidationFailure("Error2", "Validation Error 2")
         };
 
-        var validationResult = new FluentValidation.Results.ValidationResult(validationErrors);
+        var validationResult = new ValidationResult(validationErrors);
 
         _validatorMock.Setup(validator => validator.ValidateAsync(command, default))
             .ReturnsAsync(validationResult);
@@ -118,7 +123,7 @@ public class CreateTransactionCommandHandlerTests
             new ValidationFailure("Invalid Line Data Pattern", "Invalid Line")
         };
 
-        var validationResult = new FluentValidation.Results.ValidationResult(validationErrors);
+        var validationResult = new ValidationResult(validationErrors);
 
         _validatorMock.Setup(validator => validator.ValidateAsync(command, default))
             .ReturnsAsync(validationResult);
@@ -143,7 +148,7 @@ public class CreateTransactionCommandHandlerTests
 
         var command = new CreateTransactionCommand(formFileMock.Object);
 
-        var validationResult = new FluentValidation.Results.ValidationResult(new List<ValidationFailure>
+        var validationResult = new ValidationResult(new List<ValidationFailure>
         {
             new ValidationFailure("File Format", "Only text/plain file format is allowed.")
         });
