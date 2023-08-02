@@ -1,4 +1,5 @@
-﻿using ErrorOr;
+﻿using Coodesh.Infrastructure.Models.Transaction;
+using ErrorOr;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Coodesh.Application.Interfaces
 {
     public interface ITransactionFileProcessorService
     {
-        ErrorOr<bool> ProcessFile(Stream fileStream);
+        ErrorOr<List<TransactionModel>> ProcessFile(Stream fileStream);
     }
 }

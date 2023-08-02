@@ -1,10 +1,8 @@
-﻿using Coodesh.Application.Commands;
-using Coodesh.Application.Interfaces;
+﻿using Coodesh.Application.Interfaces;
 using Coodesh.Domain.Entities.Transaction;
 using Coodesh.Infrastructure.Models.Transaction;
 using Coodesh.Infrastructure.Persistence.Transaction;
 using ErrorOr;
-using FluentValidation;
 using System.Text.RegularExpressions;
 
 namespace Coodesh.Application.Services
@@ -15,20 +13,20 @@ namespace Coodesh.Application.Services
 
         public TransactionFileProcessorService(ITransactionRepository transactionRepository) => _transactionRepository = transactionRepository;
 
-        public ErrorOr<bool> ProcessFile(Stream fileStream)
+        public ErrorOr<List<TransactionModel>> ProcessFile(Stream fileStream)
         {
             using var reader = new StreamReader(fileStream);
 
-            var transactionLines = ParseTransactionLines(reader);
+            List<TransactionEntity> transactionLines = ParseTransactionLines(reader);
 
             if (!transactionLines.Any())
+            {
                 return Error.Validation("No valid transactions found.");
+            }
 
-            var transactions = ConvertToTransactionModels(transactionLines);
-            _transactionRepository.AddRange(transactions);
-            _transactionRepository.SaveChanges();
+            List<TransactionModel> transactions = ConvertToTransactionModels(transactionLines);
+            return transactions;
 
-            return true;
         }
 
         private static List<TransactionEntity> ParseTransactionLines(StreamReader reader)
