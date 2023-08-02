@@ -9,6 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["API/Coodesh.API/Coodesh.API.csproj", "API/Coodesh.API/"]
 COPY ["API/Coodesh.Application/Coodesh.Application.csproj", "API/Coodesh.Application/"]
+COPY ["API/Coodesh.Domain/Coodesh.Domain.csproj", "API/Coodesh.Domain/"]
 COPY ["API/Coodesh.Infrastructure/Coodesh.Infrastructure.csproj", "API/Coodesh.Infrastructure/"]
 RUN dotnet restore "API/Coodesh.API/Coodesh.API.csproj"
 COPY . .

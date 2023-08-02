@@ -19,6 +19,7 @@ public class TransactionContext : DbContext
 
         modelBuilder.Entity<TransactionModel>()
             .Property(t => t.Amount)
+            .HasColumnType("decimal(18,2)")
             .HasConversion(amount => amount / 100, amount => amount * 100);
     }
 
