@@ -31,14 +31,14 @@ services:
         - backend
         - frontend
 
-  client:
-    image: client-prod-i
-    build:
-      dockerfile: UI/my-react-app/Dockerfile
-    container_name: client-prod-c
-    ports:
-        - 3000:3000
-    networks:
-        - frontend
-    environment:
-        - NODE_ENV=production
+  #client:
+  #  image: client-prod-i
+  #  build:
+  #    dockerfile: UI/my-react-app/Dockerfile
+  #  container_name: client-prod-c
+  #  ports:
+  #      - 3000:3000
+  #  networks:
+  #      - frontend
+  #  environment:
+  #      - NODE_ENV=production
