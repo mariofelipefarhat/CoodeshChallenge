@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Coodesh.Infrastructure\Coodesh.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\Helper\" />
-  </ItemGroup>
-
 </Project>
