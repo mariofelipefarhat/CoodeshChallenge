@@ -2,6 +2,7 @@ version: '3.4'
 
 networks:
   backend:
+  frontend:
 
 services:
   coodesh.sqlserver:
@@ -18,7 +19,7 @@ services:
 
   coodesh.api:
     container_name: coodesh-api
-    image: ${DOCKER_REGISTRY-}coodeshapi
+    image: ${DOCKER_REGISTRY-}coodesh_api
     build:
       context: .
       dockerfile: API/Coodesh.API/Dockerfile
@@ -28,5 +29,16 @@ services:
         - coodesh.sqlserver
     networks:
         - backend
+        - frontend
 
-  
+  client:
+    image: client-prod-i
+    build:
+      dockerfile: UI/my-react-app/Dockerfile
+    container_name: client-prod-c
+    ports:
+        - 3000:3000
+    networks:
+        - frontend
+    environment:
+        - NODE_ENV=production
